@@ -1,6 +1,6 @@
 ---
 title: "HW 01 - Airbnb listings in Edinburgh"
-Author: "Adam J Sullivan"
+Author: "Jenna Evans"
 output: 
   tufte::tufte_html:
     css: ../hw.css
@@ -86,7 +86,12 @@ You can also find this information [here](https://rstudio-education.github.io/ds
 ```
 
 1.  How many observations (rows) does the dataset have? Instead of hard coding the number in your answer, use inline code.
-2.  Run `View(edibnb)` in your Console to view the data in the data viewer. What does each row in the dataset represent?
+
+13,245 rows 
+
+2.  Run `View(edibnb)` in your Console to view the data in the data viewer. What does each row in the dataset represent? 
+
+"id" the ID number of the listing, "price", price for one night stay, "neighborhood", where the listing is located, "accommodates" how many people can fit or the listing can accommodate for,"bathrooms" number of bathrooms, "bedrooms" number of bedrooms, "beds" how many beds are in the listing. Then Review scores rating, which is average rating of property, "number of reviews" which is how many reviews the listing has and then the URL. 
 
 🧶 ✅ ⬆️ *Knit,* *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
