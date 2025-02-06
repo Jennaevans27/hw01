@@ -11,7 +11,7 @@ link-citations: true
 
 ```{r include = FALSE}
 knitr::opts_chunk$set(
-  eval = FALSE,
+  eval = TRUE,
   out.width = "80%",
   fig.asp = 0.618,
   fig.width = 6
@@ -72,8 +72,8 @@ You can view the dataset as a spreadsheet using the `View()` function.
 Note that you should not put this function in your R Markdown document, but instead type it directly in the Console, as it pops open a new window (and the concept of popping open a window in a static document doesn't really make sense...).
 When you run this in the console, you'll see the following **data viewer** window pop up.
 
-```{r view-data}
-View(edibnb)
+```{r view-data, echo=TRUE}
+print(edibnb)
 ```
 
 You can find out more about the dataset by inspecting its documentation, which you can access by running `?edibnb` in the Console or using the Help menu in RStudio to search for `edibnb`.
@@ -112,11 +112,12 @@ You can find descriptions of each of the variables in the help file for the data
 
 I chose this layout because it is organized and easy to observe for each neighborhood.  
 
-````{r}
+
+```{r edibnb_price-hist, eval= TRUE}
 ggplot(data = edibnb, mapping = aes(x = price)) +
   geom_histogram(binwidth = 4) +
-  facet_wrap(~neighbourhood)
-````
+  facet_wrap(~neighbourhood) 
+```
 
 Let's de-construct this code:
 
@@ -128,7 +129,37 @@ Let's de-construct this code:
 🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
 4.  Use a single pipeline to identity the neighbourhoods with the top five median listing prices. Then, in another pipeline filter the data for these five neighbourhoods and make ridge plots of the distributions of listing prices in these five neighbourhoods. In a third pipeline calculate the minimum, mean, median, standard deviation, IQR, and maximum listing price in each of these neighbourhoods. Use the visualisation and the summary statistics to describe the distribution of listing prices in the neighbourhoods. (Your answer will include three pipelines, one of which ends in a visualisation, and a narrative.)
+
+``` {r}
+top_neighbourhoods <- edibnb %>%
+  group_by(neighbourhood) %>%
+  summarize(median_price = median(price, na.rm = TRUE)) %>%
+  arrange(desc(median_price)) %>%
+  slice_head(n = 5) %>%
+  pull(neighbourhood)
+``` 
+
+```{r, eval= TRUE}
+edibnb %>%
+filter(neighbourhood %in% top_neighbourhoods) %>%
+  group_by(neighbourhood) %>%
+  summarise(
+    min_price = min(price, na.rm = TRUE),
+    mean_price = mean(price, na.rm = TRUE),
+    median_price = median(price, na.rm = TRUE),
+    sd_price = sd(price, na.rm = TRUE),
+    IQR_price = IQR(price, na.rm = TRUE),
+    max_price = max(price, na.rm = TRUE)
+  )
+```
+
 5.  Create a visualization that will help you compare the distribution of review scores (`review_scores_rating`) across neighbourhoods. You get to decide what type of visualisation to create and there is more than one correct answer! In your answer, include a brief interpretation of how Airbnb guests rate properties in general and how the neighbourhoods compare to each other in terms of their ratings.
+
+``` {r edibnb_boxplot, eval= TRUE}
+ggplot(edibnb, aes(x = reorder(neighbourhood, review_scores_rating, median, na.rm = TRUE), 
+                    y = review_scores_rating, fill = neighbourhood)) +
+  geom_boxplot(alpha = 0.7) 
+```
 
 🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards and review the md document on GitHub to make sure you're happy with the final state of your work.*
 
